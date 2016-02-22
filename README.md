@@ -1,18 +1,22 @@
 Mahadevan-Garofalini Water Potential Implementation for LAMMPS
 ================================================================================
 
-This is the code that implements the Mahadevan & Garofalini potential in LAMMPS,
-but it's not very thoroughly tested.  Although the numerics and overall
-dynamics of the LAMMPS code are consistent with the original implementation by
-Mahadevan and Garofalini, the density of water (1 atm, 298 K) came out
-consistently higher in the LAMMPS implementation by a small amount.  I never
-figured out why, although I did use a tabulated 2-body potential generated with
-the Mahadevan code with LAMMPS and saw the same behavior.  This suggested that
-the difference in density was caused either by the 3-body potential in LAMMPS or
-some difference in the thermostat or barostat.
+This is the code that implements the [Mahadevan & Garofalini potential][1] in
+[LAMMPS][2].  This code is _not_ very thoroughly tested and is _not_ the code
+used to obtain the results in any publications put forth by Garofalini or others
+at the Intermolecular Science Laboratory at Rutgers.  
+
+Although the numerics and overall dynamics of the LAMMPS code are consistent
+with the original implementation by Mahadevan and Garofalini, the density of
+water at 1 atm, 298 K comes out consistently higher in this LAMMPS
+implementation by a small amount.  Using a tabulated 2-body potential generated
+by the original Mahadevan code with LAMMPS (`pair_style table`) shows the same
+behavior.  This suggests that the difference in density is caused either by the
+3-body potential in LAMMPS or some difference in the thermostat or barostat,
+but the exact reason has never been determined.
 
 Nevertheless, this repository contains all of the files one would need to add
-to LAMMPS to experiment with it yourself.  The following files are included:
+to LAMMPS.  The following files are included:
 
 * `pair_gg_coul_wolf.cpp` and `pair_gg_coul_wolf.h` - the code to calculate the
   2-body potential with Wolf summation
@@ -24,12 +28,21 @@ to LAMMPS to experiment with it yourself.  The following files are included:
   are all zeroed out.
 * `data.knite9.0792` and `data.knite9.4000` - sample water configurations to run
 
-I never made a set of inputs to test the SiO2 or water-silica interactions but
-I recall seeing a way to use LAMMPS's Stillinger Weber potential to achieve
+Iputs that exercise the SiO2 or water-silica interactions have not been created,
+but there should be a way to use LAMMPS's Stillinger-Weber potential to achieve
 the same 3-body cross-terms for Si-O-H described in the Mahadevan paper.
 
-I last tested this code with a February 2014 release of LAMMPS so you should
-be able to just drop the .cpp and .h files into the lammps/src directory and
-do 'make' to compile them in.  I should stress again that this code has not
-been used much though, so there may be bugs.  Hopefully it is a helpful
-starting point though.
+This code was last tested with a February 2016 (`16Feb16`) release of LAMMPS and
+installation should be a simple matter of
+
+1. copying `pair_gg_coul_wolf.cpp` and `pair_gg_coul_wolf.h` to the `src`
+   directory within the LAMMPS source distribution
+2. adding `#include "pair_gg_coul_wolf.h"` to `src/style_pair.h`
+3. `make my_system` as usual
+
+This code has not thoroughly tested, so there may be bugs.  It is intended to be
+a helpful starting point for implementing the Mahadevan-Garofalini Dissociative
+Water Potential, but it comes with **no guarantees of correctness**.
+
+[1]: http://dx.doi.org/10.1021/jp072530o
+[2]: http://lammps.sandia.gov
