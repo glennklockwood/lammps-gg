@@ -28,7 +28,7 @@ to LAMMPS.  The following files are included:
   are all zeroed out.
 * `data.knite9.0792` and `data.knite9.4000` - sample water configurations to run
 
-Iputs that exercise the SiO2 or water-silica interactions have not been created,
+Inputs that exercise the SiO2 or water-silica interactions have not been created,
 but there should be a way to use LAMMPS's Stillinger-Weber potential to achieve
 the same 3-body cross-terms for Si-O-H described in the Mahadevan paper.
 
