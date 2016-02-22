@@ -1,0 +1,72 @@
+# GG water box benchmark
+
+units        real    
+#  mass = grams/mol
+#  distance = angstroms
+#  time = femtoseconds
+#  energy = kcal/mol
+#  velocity = angstroms/fs
+#  force = kcal/mol-angstrom
+#  torque = kcal/mol
+#  temperature = kelvin
+#  pressure = atmospheres
+#  dynamic viscosity = poise
+#  charge = electrons
+#  dipole = charge*Angstrom
+#  electric field = volts/angstrom
+#  density = gram/cm^dimension
+
+atom_style    full
+
+read_data    data.knite9.0792
+
+# pair_coeff for gg/coul/wolf is: i j arep c6 xi xir ljcut
+#  atom type 1 is oxygen, q = -0.904
+#  atom type 2 is hydrogen, q = + 0.452
+#  arep (J)     22 = 4.250e-17; 52 = 2.283e-16; 55 = 0
+#  c6 (J/A^6)   22 = 4.226e-18; 52 = 0          55 = 0
+#  xi (cm)      22 = 24;        52 = 24;        55 = 24;
+#  xir (cm)     22 = 0.610;     52 = 0.2001;    55 = 0.615
+
+#                                           1/betac    lj_cut      Rc
+pair_style      hybrid/overlay gg/coul/wolf 0.224215247 5.0 10.0 sw
+pair_coeff      * * sw gg.sw.kcal O H
+#               i j          arep(kcal) c6(kcal/A^6)    xi(A)     xir(A)
+pair_coeff  1 1 gg/coul/wolf 6116.99331   608.245029     24.0 0.61000000
+pair_coeff  1 2 gg/coul/wolf 32859.0488   0.00000000     24.0 0.20009697
+pair_coeff  2 2 gg/coul/wolf 0.00000000   0.00000000     24.0 0.61500000
+
+newton on
+bond_style    none
+angle_style    none
+dihedral_style    none
+improper_style    none
+
+# neighbor list skin distance (2.0 angstroms)
+neighbor        2.0 bin
+# rebuild neighbor list every 1 steps,
+#   but NEVER rebuild until at least 10 steps have passed since last rebuild; 
+#   only rebuild neighbor list if necessary
+neigh_modify    every 1 delay 10 check yes
+
+# velocity <groupid=all> <style=create> <temp=300,seed=432567> 
+#   dist=<uniform|gaussian><keyword> <value>
+velocity    all create 298.0 432567 dist gaussian sum no mom yes rot yes
+
+timestep    0.1
+
+thermo_style    custom step temp press pe ke etotal evdwl ecoul epair vol lx ly lz
+thermo        1000
+
+dump xyzdump all xyz 1000 h2o_0792.xyz
+
+#if Nevery=2, Nrepeat=6, and Nfreq=100, 
+# then values on timesteps 90,92,94,96,98,100 will be used to compute the final
+# average on timestep 100. Similarly for timesteps 190,192,194,196,198,200 on 
+# timestep 200, etc. If Nrepeat=1 and Nfreq = 100, then no time averaging is 
+# done; values are simply generated on timesteps 100,200,etc.
+#compute 1 all temp
+
+fix        1 all npt temp 298.0 298.0 100.0 aniso 1.0 1.0 1000
+
+run             10000
