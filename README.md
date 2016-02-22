@@ -4,7 +4,7 @@ Mahadevan-Garofalini Water Potential Implementation for LAMMPS
 This is the code that implements the [Mahadevan & Garofalini potential][1] in
 [LAMMPS][2].  This code is _not_ very thoroughly tested and is _not_ the code
 used to obtain the results in any publications put forth by Garofalini or others
-at the Intermolecular Science Laboratory at Rutgers.  
+at the [Interfacial Molecular Science Laboratory][3] at Rutgers.  
 
 Although the numerics and overall dynamics of the LAMMPS code are consistent
 with the original implementation by Mahadevan and Garofalini, the density of
@@ -46,3 +46,4 @@ Water Potential, but it comes with **no guarantees of correctness**.
 
 [1]: http://dx.doi.org/10.1021/jp072530o
 [2]: http://lammps.sandia.gov
+[3]: http://glass.rutgers.edu
